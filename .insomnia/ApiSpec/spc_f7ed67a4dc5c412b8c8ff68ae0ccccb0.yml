@@ -1,7 +1,7 @@
 _id: spc_f7ed67a4dc5c412b8c8ff68ae0ccccb0
 type: ApiSpec
 parentId: wrk_66a79a59a8c74161a740d58eeaf53861
-modified: 1638301746394
+modified: 1638302096215
 created: 1638291470429
 fileName: my-spec.yaml
 contents: >-
@@ -14,7 +14,7 @@ contents: >-
 
   tags:
     - name: house
-      description: Everything about your Houses
+      description: aurel changed the description in there
     - name: store
       description: Access to Petstore orders
     - name: user
