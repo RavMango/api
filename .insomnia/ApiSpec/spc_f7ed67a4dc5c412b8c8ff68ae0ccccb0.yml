@@ -1,611 +1,415 @@
 _id: spc_f7ed67a4dc5c412b8c8ff68ae0ccccb0
 type: ApiSpec
 parentId: wrk_66a79a59a8c74161a740d58eeaf53861
-modified: 1638302096215
+modified: 1638639133384
 created: 1638291470429
 fileName: my-spec.yaml
-contents: >-
-  openapi: 3.0.0
+contents: >
+  openapi: '3.0.2'
 
   info:
-    description:
-    version: 1.0.2
-    title: Kamernet server
-
-  tags:
-    - name: house
-      description: aurel changed the description in there
-    - name: store
-      description: Access to Petstore orders
-    - name: user
-      description: Operations about user
-      externalDocs:
-
-  paths:
-    /house:
-      post:
-        tags:
-          - house
-        summary: Add a new house to the market
-        description: ""
-        operationId: addHouse
-        requestBody:
-          $ref: "#/components/requestBodies/House"
-        responses:
-          "405":
-            description: Invalid input
-      put:
-        tags:
-          - house
-        summary: Update an existing house
-        description: ""
-        operationId: updateHouse
-        requestBody:
-          $ref: "#/components/requestBodies/Pet"
-        responses:
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: House not found
-          "405":
-            description: Validation exception
-    /pet/findByStatus:
-      get:
-        tags:
-          - pet
-        summary: Finds Pets by status
-        description: Multiple status values can be provided with comma separated strings
-        operationId: findPetsByStatus
-        parameters:
-          - name: status
-            in: query
-            description: Status values that need to be considered for filter
-            required: true
-            explode: true
-            schema:
-              type: array
-              items:
-                type: string
-                enum:
-                  - available
-                  - pending
-                  - sold
-                default: available
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Pet"
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Pet"
-          "400":
-            description: Invalid status value
-    /pet/findByTags:
-      get:
-        tags:
-          - pet
-        summary: Finds Pets by tags
-        description: Multiple tags can be provided with comma separated strings. Use tag1,
-          tag2, tag3 for testing.
-        operationId: findPetsByTags
-        parameters:
-          - name: tags
-            in: query
-            description: Tags to filter by
-            required: true
-            explode: true
-            schema:
-              type: array
-              items:
-                type: string
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Pet"
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Pet"
-          "400":
-            description: Invalid tag value
-        deprecated: true
-    "/pet/{petId}":
-      get:
-        tags:
-          - pet
-        summary: Find pet by ID
-        description: Returns a single pet
-        operationId: getPetById
-        parameters:
-          - name: petId
-            in: path
-            description: ID of pet to return
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: "#/components/schemas/Pet"
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Pet"
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Pet not found
-      post:
-        tags:
-          - pet
-        summary: Updates a pet in the store with form data
-        description: ""
-        operationId: updatePetWithForm
-        parameters:
-          - name: petId
-            in: path
-            description: ID of pet that needs to be updated
-            required: true
-            schema:
-              type: integer
-              format: int64
-        requestBody:
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  name:
-                    description: Updated name of the pet
-                    type: string
-                  status:
-                    description: Updated status of the pet
-                    type: string
-        responses:
-          "405":
-            description: Invalid input
-      delete:
-        tags:
-          - pet
-        summary: Deletes a pet
-        description: ""
-        operationId: deletePet
-        parameters:
-          - name: api_key
-            in: header
-            required: false
-            schema:
-              type: string
-          - name: petId
-            in: path
-            description: Pet id to delete
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Pet not found
-    /store/inventory:
-      get:
-        tags:
-          - store
-        summary: Returns pet inventories by status
-        description: Returns a map of status codes to quantities
-        operationId: getInventory
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: object
-                  additionalProperties:
-                    type: integer
-                    format: int32
-    /store/order:
-      post:
-        tags:
-          - store
-        summary: Place an order for a pet
-        description: ""
-        operationId: placeOrder
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Order"
-          description: order placed for purchasing the pet
-          required: true
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: "#/components/schemas/Order"
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Order"
-          "400":
-            description: Invalid Order
-    "/store/order/{orderId}":
-      get:
-        tags:
-          - store
-        summary: Find purchase order by ID
-        description: For valid response try integer IDs with value >= 1 and <= 10. Other
-          values will generated exceptions
-        operationId: getOrderById
-        parameters:
-          - name: orderId
-            in: path
-            description: ID of pet that needs to be fetched
-            required: true
-            schema:
-              type: integer
-              format: int64
-              minimum: 1
-              maximum: 10
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: "#/components/schemas/Order"
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Order"
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Order not found
-      delete:
-        tags:
-          - store
-        summary: Delete purchase order by ID
-        description: For valid response try integer IDs with positive integer value. Negative
-          or non-integer values will generate API errors
-        operationId: deleteOrder
-        parameters:
-          - name: orderId
-            in: path
-            description: ID of the order that needs to be deleted
-            required: true
-            schema:
-              type: integer
-              format: int64
-              minimum: 1
-        responses:
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Order not found
-    /user:
-      post:
-        tags:
-          - user
-        summary: Create user
-        description: This can only be done by the logged in user.
-        operationId: createUser
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-          description: Created user object
-          required: true
-        responses:
-          default:
-            description: successful operation
-    /user/createWithArray:
-      post:
-        tags:
-          - user
-        summary: Creates list of users with given input array
-        description: ""
-        operationId: createUsersWithArrayInput
-        requestBody:
-          $ref: "#/components/requestBodies/UserArray"
-        responses:
-          default:
-            description: successful operation
-    /user/createWithList:
-      post:
-        tags:
-          - user
-        summary: Creates list of users with given input array
-        description: ""
-        operationId: createUsersWithListInput
-        requestBody:
-          $ref: "#/components/requestBodies/UserArray"
-        responses:
-          default:
-            description: successful operation
-    /user/login:
-      get:
-        tags:
-          - user
-        summary: Logs user into the system
-        description: ""
-        operationId: loginUser
-        parameters:
-          - name: username
-            in: query
-            description: The user name for login
-            required: true
-            schema:
-              type: string
-          - name: password
-            in: query
-            description: The password for login in clear text
-            required: true
-            schema:
-              type: string
-        responses:
-          "200":
-            description: successful operation
-            headers:
-              X-Rate-Limit:
-                description: calls per hour allowed by the user
-                schema:
-                  type: integer
-                  format: int32
-              X-Expires-After:
-                description: date in UTC when token expires
-                schema:
-                  type: string
-                  format: date-time
-            content:
-              application/xml:
-                schema:
-                  type: string
-              application/json:
-                schema:
-                  type: string
-          "400":
-            description: Invalid username/password supplied
-    /user/logout:
-      get:
-        tags:
-          - user
-        summary: Logs out current logged in user session
-        description: ""
-        operationId: logoutUser
-        responses:
-          default:
-            description: successful operation
-    "/user/{username}":
-      get:
-        tags:
-          - user
-        summary: Get user by user name
-        description: ""
-        operationId: getUserByName
-        parameters:
-          - name: username
-            in: path
-            description: "The name that needs to be fetched. Use user1 for testing. "
-            required: true
-            schema:
-              type: string
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: "#/components/schemas/User"
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/User"
-          "400":
-            description: Invalid username supplied
-          "404":
-            description: User not found
-      put:
-        tags:
-          - user
-        summary: Updated user
-        description: This can only be done by the logged in user.
-        operationId: updateUser
-        parameters:
-          - name: username
-            in: path
-            description: name that need to be updated
-            required: true
-            schema:
-              type: string
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-          description: Updated user object
-          required: true
-        responses:
-          "400":
-            description: Invalid user supplied
-          "404":
-            description: User not found
-      delete:
-        tags:
-          - user
-        summary: Delete user
-        description: This can only be done by the logged in user.
-        operationId: deleteUser
-        parameters:
-          - name: username
-            in: path
-            description: The name that needs to be deleted
-            required: true
-            schema:
-              type: string
-        responses:
-          "400":
-            description: Invalid username supplied
-          "404":
-            description: User not found
-
+    title: Web Engineering Movies API
+    version: '1.0'
+    description: |
+      This specification serves as the baseline for all tools developed in the
+      context of the tutorials for the course Web Engineering at the RuG.
   servers:
-    - url: https://petstore.swagger.io/v2
+    - url: https://api.server.test/v1
+
   components:
-    requestBodies:
-      UserArray:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/User"
-        description: List of user object
-        required: true
-      Pet:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Pet"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/Pet"
-        description: Pet object that needs to be added to the store
-        required: true
     schemas:
-      Order:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          petId:
-            type: integer
-            format: int64
-          quantity:
-            type: integer
-            format: int32
-          shipDate:
-            type: string
-            format: date-time
-          status:
-            type: string
-            description: Order Status
-            enum:
-              - placed
-              - approved
-              - delivered
-          complete:
-            type: boolean
-            default: false
-        xml:
-          name: Order
-      User:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          username:
-            type: string
-          firstName:
-            type: string
-          lastName:
-            type: string
-          email:
-            type: string
-          password:
-            type: string
-          phone:
-            type: string
-          userStatus:
-            type: integer
-            format: int32
-            description: User Status
-        xml:
-          name: User
-      Category:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          name:
-            type: string
-        xml:
-          name: Category
-      Tag:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          name:
-            type: string
-        xml:
-          name: Tag
-      Pet:
+      Actor:
         type: object
         required:
-          - name
-          - photoUrls
+          - "name"
         properties:
           id:
             type: integer
-            format: int64
-          category:
-            $ref: "#/components/schemas/Category"
+            readOnly: true
           name:
             type: string
-            example: doggie
-          photoUrls:
+          movies:
             type: array
-            xml:
-              name: photoUrl
-              wrapped: true
+            items:
+              $ref: "#/components/schemas/MovieSummary"
+      
+      ActorSummary:
+        type: object
+        required:
+          - "name"
+        properties:
+          id:
+            type: integer
+            readOnly: true
+          name:
+            type: string
+
+      Movie:
+        type: object
+        required:
+          - "title"
+          - "year"
+        properties:
+          id:
+            type: integer
+            readOnly: true
+          title:
+            type: string
+          description:
+            type: string
+          year:
+            type: integer
+            description: Year of release
+          rating:
+            type: string
+            description: MPA film rating
+          review:
+            type: object
+            properties:
+              user:
+                type: number
+                description: Ratings by IMDb users
+                minimum: 1
+                maximum: 10
+              user-count:
+                type: integer
+                description: Number of ratings by IMDb users
+              metascore:
+                type: integer
+                minimum: 1
+                maximum: 100
+          languages:
+            type: array
             items:
               type: string
-          tags:
+          actors:
             type: array
-            xml:
-              name: tag
-              wrapped: true
             items:
-              $ref: "#/components/schemas/Tag"
-          status:
+              $ref: "#/components/schemas/ActorSummary"
+          imdb_url:
             type: string
-            description: pet status in the store
-            enum:
-              - available
-              - pending
-              - sold
-        xml:
-          name: Pet
-      ApiResponse:
+
+      MovieSummary:
         type: object
         properties:
-          code:
+          id:
             type: integer
-            format: int32
-          type:
+            readOnly: true
+          title:
             type: string
-          message:
+          year:
+            type: integer
+            description: Year of release
+          rating:
             type: string
+            description: MPA film rating
+          
+
+      MovieFilterKeys:
+        type: string
+        enum:
+          - title
+          - year
+          - rating
+
+
+
+    responses:
+      BadRequest:
+        description: Request was not well-formed, see error details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error-message:
+                  type: string
+                  description: Error message detailing the problem with the request
+
+      NotFound:
+        description: Resource not found
+
+      NoResults:
+        description: List empty; no results
+
+      ServerError:
+        description: Server error; no results, try again later
+
+    parameters:
+      order-by:
+        name: order-by
+        in: query
+        required: false
+        description: The column to order the result data by
+        schema:
+          $ref: "#/components/schemas/MovieFilterKeys"
+
+      order-dir:
+        name: order-dir
+        in: query
+        required: false
+        description: The directorion to order the indicated column
+        schema:
+          type: string
+          enum:
+            - desc
+            - asc
+
+      movie-filter-title:
+        name: title
+        in: query
+        required: false
+        description: Filtering the results by title
+        schema:
+          type: string
+
+      movie-filter-year:
+        name: year
+        in: query
+        required: false
+        description: Filtering the results by year
+        schema:
+          type: integer
+
+      actor-id:
+        name: id
+        in: path
+        required: true
+        description: The ID of the actor
+        schema:
+          type: integer
+
+
+  paths:
+    /movies:
+      get:
+        tags:
+          - Movies
+        description: Retrieves a list of movies, possibly filtered by the requested criteria
+        summary: Retrieve a list of (selected) movies
+        parameters:
+          - $ref: "#/components/parameters/order-by"
+          - $ref: "#/components/parameters/order-dir"
+          - $ref: "#/components/parameters/movie-filter-title"
+          - $ref: "#/components/parameters/movie-filter-year"
+            
+        responses:
+          '200':
+            description: ""
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/MovieSummary"
+          '204':
+            $ref: "#/components/responses/NoResults"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+      post:
+        tags:
+          - Movies
+        summary: Create a new movie
+        description: Creates a new movie with the given information
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Movie"
+        responses:
+          '201':
+            description: Movie successfully created
+            content:
+              application/json:
+                schema:
+                  type: integer
+                  description: ID of newly created movie
+            headers:
+              Location:
+                schema:
+                  type: string
+                description: The URL of the newly-created movie
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '409':
+            description: Movie with the same name already exists
+            headers:
+              Location:
+                schema:
+                  type: string
+                description: The URL of the pre-existing movie
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+    /movies/{id}:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the movie
+          schema:
+            type: integer
+
+      get:
+        tags:
+          - Movies
+        summary: Retrieve a selected movie
+        description: Retrieves the movie with the given id
+        responses:
+          '200':
+            description: ""
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Movie"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '404':
+            $ref:  "#/components/responses/NotFound"
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+      put:
+        tags:
+          - Movies
+        summary: Update a movie
+        description: Updates the movie with the given id
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Movie"
+        responses:
+          '200':
+            description: "Movie updated, returns the new state"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Movie"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '404':
+            $ref: "#/components/responses/NotFound"
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+      delete:
+        tags:
+          - Movies
+        summary: Delete a movie
+        description: Deletes the movie with the given id
+        responses:
+          '204':
+            description: Movie deleted successfully
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '404':
+            $ref: "#/components/responses/NotFound"
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+    /actors:
+      get:
+        tags:
+          - Actors
+        summary: Retrieve a list of actors
+        description: Retrieves a list of all actors
+        responses:
+          '200':
+            description: ""
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/ActorSummary"
+          '204':
+            $ref: "#/components/responses/NoResults"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+    /actors/{id}:
+      parameters:
+        - $ref: "#/components/parameters/actor-id"
+
+      get:
+        tags:
+          - Actors
+        summary: Retrieve a selected actor
+        description: Retrieves the actor with the given id
+        responses:
+          '200':
+            description: ""
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Actor"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '404':
+            $ref:  "#/components/responses/NotFound"
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
+
+    /actors/{id}/movies:
+      parameters:
+        - $ref: "#/components/parameters/actor-id"
+
+      get:
+        tags:
+          - Actors
+        summary: Retrieve a list of movies featuring a selected actor
+        description: Retrieves all movies featuring the actor with the given id, possibly filtered by the requested criteria
+        parameters:
+          - $ref: "#/components/parameters/order-by"
+          - $ref: "#/components/parameters/order-dir"
+          - $ref: "#/components/parameters/movie-filter-title"
+          - $ref: "#/components/parameters/movie-filter-year"
+            
+        responses:
+          '200':
+            description: ""
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/MovieSummary"
+          '204':
+            $ref: "#/components/responses/NoResults"
+
+          '400':
+            $ref: '#/components/responses/BadRequest'
+
+          '404':
+            $ref:  "#/components/responses/NotFound"
+
+          '5XX':
+            $ref: '#/components/responses/ServerError'
 contentType: yaml
